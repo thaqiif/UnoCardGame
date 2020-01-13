@@ -1,6 +1,6 @@
 # UNO Card
 
-Uno card is a simple game developed to play between you against the computer. The algorithm comes from how we play the game, the way we choose the card by either its color, number or the wild card. 
+Uno card is a simple game developed to play between you against the computer. The algorithm comes from how we play the game; the way we choose the card by either its color, number or the wild card. 
 
 The game developed using web-languages programming which are HTML, CSS and JavaScript. When I develop this game, I arrange by priority on how computer choosing cards when it comes to computer's turn. The priorities as follow:
 
