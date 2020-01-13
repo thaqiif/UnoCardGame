@@ -13,7 +13,7 @@ The game developed using web-languages programming which are HTML, CSS and JavaS
 
 You can go and try live by clicking here 👉 [UNO GAME](https://strkp-uno.blogspot.com/)
 
-Code Last Updated on 13/04/2019 6:45PM
+Code Last Updated on 13/04/2017 6:45PM
 
 ## Android Mobile App
 When I want to play this game (on the website), it require internet connection to load at first and every time the game is finished. So, I convert the game into mobile app with the help of [PhoneGap](https://phonegap.com) which enables the conversion without the need to write another mobile-code. Just use the same code and languages, and let the PhoneGap do the magic.
