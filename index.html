@@ -1,0 +1,728 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="viewport" content="user-scalable=no, initial-scale=1, minimum-scale=1, width=device-width" />
+    
+    <title>UNO GAME</title>
+    <style rel="stylesheet">
+        html, body{
+            margin: 0;
+            padding: 0;
+        }
+        #StartGameLink{
+            display: block;
+            text-decoration: none;
+            text-align: center;
+            color: #fff;
+            background-color: #FF5555;
+            padding: 8px 12px;
+        }
+        div#logo{
+            text-align: center;
+            display: block;
+            margin-bottom: 20px;
+        }
+        #statusMessage{
+            position: fixed;
+            top: 0; right: 0; left: 0;
+            text-align: center;
+            padding: 10px;
+            background: red;
+            color: white;
+            font-family: Helvetica;
+
+        }
+        #mainBody{
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 10px;
+        }
+        #mainCardBoard > img{
+            width: 75%;
+            height: auto;
+            margin: 0px;
+        }
+        .userCardImage{
+            width: 30%;
+            height: auto;
+        }
+        #mainCardBoard{
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        div#divider{
+            margin: 40px 0px;
+            background: #edeeef;
+            font-size: 1px;
+        }
+        #detailCards{
+            padding: 8px 0px 8px 50px;
+            margin: 10px 10px;
+            position: relative;
+            z-index: -999;
+            left: 0;
+            right: 0;
+            color: #000;
+            background: #edeeef;
+            display: none;
+        }
+        #passUserLink, #drawUserLink{
+            display: block;
+            padding: 8px 12px;
+            color: #000;
+            margin-top: 10px;
+            background-color: #edeeef;
+            text-decoration: none;
+            text-align: center;
+        }
+        #userCardBoard{
+            text-align: center;
+        }
+        #b, #g, #y, #r{
+            padding: 8px 12px;
+            color: #fff;
+            margin-top: 10px;
+            text-align: center;
+            display: block;
+        }
+        #r{
+            background-color: #FF5555;
+        }
+        #b{
+            background-color: #5654FF;
+        }
+        #y{
+            background-color: #FFAA01;
+        }
+        #g{
+            background-color: #00AA01;
+        }
+    </style>
+<body>
+    <div id="statusMessage">UNO</div>
+    <div id="mainBody">
+    
+        <div id='logo'><img id='logo' src='img/logo.png' height="300px" width = "auto"/></div>
+        
+    <a id='StartGameLink' href="javascript:startGame()">Start Game</a><br/>
+    <div id='mainCardBoard'></div>
+    <div id='detailCards'></div>
+    <div id='userCardBoard'></div>
+    
+    
+    
+    </div>
+    
+    <script type="text/javascript" src="jquery-latest.js"></script>
+    <script type="text/javascript">
+    
+        // Image SRC link by color
+        var allCards = {};
+        // Color : Blue
+        allCards["b_0"] = "img/b_0.png";
+        allCards["b_1"] = "img/b_1.png";
+        allCards["b_2"] = "img/b_2.png";
+        allCards["b_3"] = "img/b_3.png";
+        allCards["b_4"] = "img/b_4.png";
+        allCards["b_5"] = "img/b_5.png";
+        allCards["b_6"] = "img/b_6.png";
+        allCards["b_7"] = "img/b_7.png";
+        allCards["b_8"] = "img/b_8.png";
+        allCards["b_9"] = "img/b_9.png";
+        allCards["b_draw"] = "img/b_draw.png";
+        allCards["b_reverse"] = "img/b_reverse.png";
+        allCards["b_skip"] = "img/b_skip.png";
+
+        // Color : Green
+        allCards["g_0"] = "img/g_0.png";
+        allCards["g_1"] = "img/g_1.png";
+        allCards["g_2"] = "img/g_2.png";
+        allCards["g_3"] = "img/g_3.png";
+        allCards["g_4"] = "img/g_4.png";
+        allCards["g_5"] = "img/g_5.png";
+        allCards["g_6"] = "img/g_6.png";
+        allCards["g_7"] = "img/g_7.png";
+        allCards["g_8"] = "img/g_8.png";
+        allCards["g_9"] = "img/g_9.png";
+        allCards["g_draw"] = "img/g_draw.png";
+        allCards["g_reverse"] = "img/g_reverse.png";
+        allCards["g_skip"] = "img/g_skip.png";
+
+        // Color : Red
+        allCards["r_0"] = "img/r_0.png";
+        allCards["r_1"] = "img/r_1.png";
+        allCards["r_2"] = "img/r_2.png";
+        allCards["r_3"] = "img/r_3.png";
+        allCards["r_4"] = "img/r_4.png";
+        allCards["r_5"] = "img/r_5.png";
+        allCards["r_6"] = "img/r_6.png";
+        allCards["r_7"] = "img/r_7.png";
+        allCards["r_8"] = "img/r_8.png";
+        allCards["r_9"] = "img/r_9.png";
+        allCards["r_draw"] = "img/r_draw.png";
+        allCards["r_reverse"] = "img/r_reverse.png";
+        allCards["r_skip"] = "img/r_skip.png";
+
+        // Color : Yellow
+        allCards["y_0"] = "img/y_0.png";
+        allCards["y_1"] = "img/y_1.png";
+        allCards["y_2"] = "img/y_2.png";
+        allCards["y_3"] = "img/y_3.png";
+        allCards["y_4"] = "img/y_4.png";
+        allCards["y_5"] = "img/y_5.png";
+        allCards["y_6"] = "img/y_6.png";
+        allCards["y_7"] = "img/y_7.png";
+        allCards["y_8"] = "img/y_8.png";
+        allCards["y_9"] = "img/y_9.png";
+        allCards["y_draw"] = "img/y_draw.png";
+        allCards["y_reverse"] = "img/y_reverse.png";
+        allCards["y_skip"] = "img/y_skip.png";
+
+        // Powerful Cards
+        allCards["color_chooser"] = "img/colorchooser.png";
+        allCards["draw_four"] = "img/draw_four.png";
+
+        var allCardsByName = [
+          "b_0", "b_1", "b_2", "b_3", "b_4", "b_5", "b_6", "b_7", "b_8", "b_9", "b_draw", "b_reverse", "b_skip",
+          "g_0", "g_1", "g_2", "g_3", "g_4", "g_5", "g_6", "g_7", "g_8", "g_9", "g_draw", "g_reverse", "g_skip",
+          "r_0", "r_1", "r_2", "r_3", "r_4", "r_5", "r_6", "r_7", "r_8", "r_9", "r_draw", "r_reverse", "r_skip",
+          "y_0", "y_1", "y_2", "y_3", "y_4", "y_5", "y_6", "y_7", "y_8", "y_9", "y_draw", "y_reverse", "y_skip",
+          "b_1", "b_2", "b_3", "b_4", "b_5", "b_6", "b_7", "b_8", "b_9", "b_draw", "b_reverse", "b_skip",
+          "g_1", "g_2", "g_3", "g_4", "g_5", "g_6", "g_7", "g_8", "g_9", "g_draw", "g_reverse", "g_skip",
+          "r_1", "r_2", "r_3", "r_4", "r_5", "r_6", "r_7", "r_8", "r_9", "r_draw", "r_reverse", "r_skip",
+          "y_1", "y_2", "y_3", "y_4", "y_5", "y_6", "y_7", "y_8", "y_9", "y_draw", "y_reverse", "y_skip",
+          "draw_four", "draw_four", "draw_four", "draw_four", "color_chooser", "color_chooser", "color_chooser", "color_chooser"
+        ];
+
+        var usedCards = [];
+
+        var userCards = [];
+        var compCards = [];
+
+        var userTurn;        
+        var CurrentCards;
+        var currentColor;
+
+        var compDrawTimes = 0;
+
+        function drawOneCards(){
+
+            cardLeft = allCardsByName.length;
+            if(cardLeft > 0){
+                return allCardsByName.splice(cardLeft * Math.random() | 0, 1)[0];
+            }else{
+                for(i=0; i<usedCards.length; i++){
+                    allCardsByName.push(usedCards[i]);
+                    usedCards.splice(i, 1);
+                }
+
+                drawOneCards();
+            }
+        }
+
+        function updateCurrentColor(color){
+            switch(color){
+
+                case "r": // red
+                    $("#statusMessage").css("background", "#FF5555");
+                    currentColor = "r";                
+                    break;
+                case "b": // blue
+                    $("#statusMessage").css("background", "#5654FF");
+                    currentColor = "b";
+                    break;
+                case "y": // yellow
+                    $("#statusMessage").css("background", "#FFAA01");
+                    currentColor = "y";
+                    break;
+                case "g": // green
+                    $("#statusMessage").css("background", "#00AA01");
+                    currentColor = "g";
+                    break;
+                default:
+                    $("#statusMessage").css("background", "#FF5555");
+            }
+        }
+
+        function changeCardsBoard(latestCard, text=null){
+            if(latestCard){
+                usedCards.push(CurrentCards);
+                CurrentCards = latestCard;
+                $("#mainCardBoard").html('<img src="'+allCards[latestCard]+'"/>');
+
+            }else{
+                if(!CurrentCards){
+                    cardLeft = allCardsByName.length;
+                    checkCard = allCardsByName.splice(cardLeft * Math.random() | 0, 1)[0];
+                    c = checkCard.split("_");
+                    if(c[0] == "draw" || c[0] == "color" || c[1] == "reverse" || c[1] == "skip" || c[1] == "draw"){
+                        allCardsByName.push(checkCard);
+                        changeCardsBoard();
+                    }else{
+                        CurrentCards = checkCard;
+                        updateCurrentColor(c[0]);
+                        $("#mainCardBoard").html('<img src="'+allCards[checkCard]+'"/>');
+                    }
+                }
+            }
+
+            if(text) $("#statusMessage").text(text);
+        }
+
+        function draw(){
+
+            card = drawOneCards();
+            if(userTurn){
+                userCards.push(card);
+                displayUserCards();
+            }else{
+                compCards.push(card);
+            }
+        }
+
+        function pass(){
+            if(userTurn) userNowTurn(false);
+            else userNowTurn(true);
+        }
+
+        function displayUserCards(){
+
+            cardsCombine = "";
+            for(i = 0; i < userCards.length; i++){
+
+                var cardIndex = userCards[i];
+                var urlImg = allCards[cardIndex];
+
+                cardsCombine += "<img id='"+cardIndex+"' src='"+urlImg+"' class='userCardImage'/>";
+            }
+
+            $("#userCardBoard").html(cardsCombine);
+            $("#userCardBoard").append("<a id='drawUserLink' href='#'>Draw</a> <a id='passUserLink' href='#'>Pass</a>");
+
+            $("#drawUserLink").hide();
+            $("#passUserLink").show();
+        }
+
+        function displayDetailCards(){
+
+            comp = compCards.length;
+            user = userCards.length;
+
+            text = "CARD DETAILS<br/><b>User :</b> "+user+"<br/><b>Comp : </b>"+comp;
+            $("#detailCards").html(text);
+        }
+
+        function userNowTurn(yesOrNo){
+            userTurn = yesOrNo;
+
+            if(userTurn){
+                changeStatus("Your Turn!");
+                $("#drawUserLink").show();
+                $("#passUserLink").hide();
+            }else{
+                changeStatus("Comp Turn!");
+                setTimeout(compAutoChooser, 2500);
+            }
+        }
+
+        function chooseColor(colour){
+
+            if(!colour){
+                disChoose = "<p>Choose your Color: </p><div id='b'>Blue</div><div id='r'>Red</div><div id='y'>Yellow</div><div id='g'>Green</div>";
+                $("#userCardBoard").html(disChoose);
+                $('html, body').animate({
+                    scrollTop: $('#userCardBoard').offset().top
+                }, 400);
+            }else{
+                currentColor = colour;
+                updateCurrentColor(colour);
+                displayUserCards();
+            }
+
+        }
+
+        function removeCards(user, cardID){
+            if(user == "user"){
+                index = userCards.indexOf(cardID);
+                userCards.splice(index, 1);
+                displayUserCards();
+            }else{
+                index = compCards.indexOf(cardID);
+                compCards.splice(index, 1);
+            }
+
+            if(userCards.length == 0){
+                alert("Game ended! You Won!");
+                location.href = "/";
+            }else if(compCards.length == 0){
+                alert("Game ended! Comp Won!");
+                location.href = "/";
+            }
+
+            displayDetailCards();
+        }
+
+        function checkAvailability(cardID){
+
+            check = cardID.split("_");
+            current = CurrentCards.split("_");
+
+            if(check[0] == currentColor){ // Check warna
+                if(check[1] == "draw"){
+                    changeStatus("Draw Cards!");
+                    changeCardsBoard(cardID);
+                    for(i=0;i<2;i++) compCards.push(drawOneCards());
+                    removeCards("user", cardID);
+                    userNowTurn(true);
+                }else if(check[1] == "reverse"){
+                    changeStatus("Reverse Cards!");
+                    changeCardsBoard(cardID, "Reverse Cards!");
+                    removeCards("user", cardID);
+                    userNowTurn(true);
+                }else if(check[1] == "skip"){
+                    changeStatus("Skip Cards!");
+                    changeCardsBoard(cardID);
+                    removeCards("user", cardID);
+                    userNowTurn(true);
+                }else{
+                    changeCardsBoard(cardID);
+                    changeStatus("Awesome Cards!");
+                    userNowTurn(false);
+                    removeCards("user", cardID);
+                }
+
+                updateCurrentColor(check[0]);
+
+            }else if(check[1] == current[1]){ // check nombor sama dan belakangnya!
+                if(check[1] == "draw"){
+                    changeStatus("Draw Cards!");
+                    changeCardsBoard(cardID);
+                    updateCurrentColor(check[0]);
+                    for(i=0;i<2;i++) compCards.push(drawOneCards());
+                    removeCards("user", cardID);
+                    userNowTurn(true);
+                }else if(check[1] == "reverse"){
+                    changeStatus("Reverse Cards!");
+                    changeCardsBoard(cardID);
+                    updateCurrentColor(check[0]);
+                    removeCards("user", cardID);
+                    userNowTurn(true);
+                }else if(check[1] == "skip"){
+                    changeStatus("Skip Cards!");
+                    changeCardsBoard(cardID);
+                    updateCurrentColor(check[0]);
+                    removeCards("user", cardID);
+                    userNowTurn(true);
+                }else if(check[1] == "four"){
+                    remain = userCards.length-1;
+                    for(i=0;i<4;i++){
+                        takenCard = userCards[remain];
+                        compCards.push(takenCard);
+                        compCards.push(drawOneCards());
+                        userCards.splice(remain, 1);
+                        remain--;
+                    }
+                    changeStatus("You're lucky! Choose colour below.");
+                    changeCardsBoard(cardID);
+                    removeCards("user", cardID);
+                    chooseColor();
+                    userNowTurn(true);
+                }else if(check[1] == "chooser"){
+                    changeStatus("Wild Cards! Choose your colour below.");
+                    changeCardsBoard(cardID);
+                    removeCards("user", cardID);
+                    chooseColor();
+                    userNowTurn(false);
+                }else{ // Nombor sama
+                    changeCardsBoard(cardID);
+                    changeStatus("Nice Cards!");
+                    userNowTurn(false);
+                    updateCurrentColor(check[0]);
+                    removeCards("user", cardID);
+                }
+            }else if(check[0] == "color"){
+                changeStatus("Wild Cards! Choose your colour below.");
+                changeCardsBoard(cardID);
+                removeCards("user", cardID);
+                chooseColor();
+            }else if(check[1] == "four"){
+                for(i=0;i<4;i++) compCards.push(drawOneCards()); 
+                changeStatus("You're lucky! Choose colour below.");
+                changeCardsBoard(cardID);
+                removeCards("user", cardID);
+                chooseColor();
+            }else{
+
+                $("#drawUserLink").show();
+                $("#passUserLink").hide();            
+                changeStatus("Wrong Cards!");
+            }
+
+            //setTimeout(hideStatus, 1000);
+
+        }
+
+        function compAutoChooser(){
+
+            allValid = true;
+            for(i=0; i<compCards.length; i++){ // Nak check warna
+
+                cardID = compCards[i];
+                checkCompColor = compAutoCheckColor(cardID); // Check kalau warna sama dengan current
+                if(checkCompColor && !userTurn){ // Kalau return true, tapi comp masih jalan
+                    allValid = true;
+                    setTimeout(compAutoChooser, 2500);
+
+                    break;
+                }else if(checkCompColor && userTurn){ // Kalau return true, tapi comp tak jalan dah.
+                    allValid = true;
+                    break;
+                }else if(!checkCompColor && !userTurn){ // Kalau return false, tapi comp jalan, check nombor pulak
+                    checkCompNum = compAutoCheckNumber(cardID); // Check kalau blkg sama dgn current
+                    if(checkCompNum && !userTurn){ // Kalau return true, tapi comp jalan
+                        allValid = true;
+                        setTimeout(compAutoChooser, 2500);
+                        break;
+                    }else if(checkCompNum && userTurn){ // Kalau return true, tapi comp takjalan dah
+                        allValid = true;
+                        break;
+                    }else if(c[0] == "color"){ // Kalau kad tu kad colorchooser
+                        allValid = true;
+                        changeStatus("Wild Cards!");
+                        color = compAutoColor();
+                        updateCurrentColor(color);
+                        changeCardsBoard(cardID);
+                        removeCards("comp", cardID);
+                        userNowTurn(true);
+                        displayUserCards();
+                        break;
+                    }else if(c[1] == "four"){ // Comp nak letak drawfour
+                        allValid = true;
+                        changeStatus("Comp wild plus 4 Cards!");
+                        color = compAutoColor();
+                        updateCurrentColor(color);
+                        changeCardsBoard(cardID);
+                        removeCards("comp", cardID);
+                        setTimeout(compAutoChooser, 2500);
+                        for(i=0;i<4;i++) userCards.push(drawOneCards());
+                        displayUserCards();
+                        break;
+                    }else{
+                        allValid = false;
+                    }
+                }
+            }
+
+            if(!allValid){
+                draw();
+                userNowTurn(true); // Comp Passed!
+                changeStatus("Comp Passed!");
+            }
+
+            setTimeout(hideStatus, 1000);
+        }
+
+        function compAutoColor(){
+            col = ["r", "y", "g", "b"];
+            return col.splice(col.length * Math.random() | 0, 1)[0];
+        }
+
+        function compAutoCheckColor(cards){
+
+            c = cards.split("_");
+            if(c[0] == currentColor){ // Check warna
+                if(c[1] == "draw"){ // User put yellow, comp put yellow draw cards
+                    changeStatus("Draw Cards!");
+                    changeCardsBoard(cards);
+                    for(i=0;i<2;i++) userCards.push(drawOneCards());
+                    removeCards("comp", cards);
+                    updateCurrentColor(c[0]);
+                    displayUserCards();
+                    return true;
+                }else if(c[1] == "reverse"){ // User put yelow, comp put yellow reverse cards
+                    changeStatus("Reverse Cards!");
+                    changeCardsBoard(cards);
+                    removeCards("comp", cards);
+                    updateCurrentColor(c[0]);
+                    return true;
+                }else if(c[1] == "skip"){ // User put yellow, comp put yellow skip cards!
+                    changeStatus("Skip Cards!");
+                    changeCardsBoard(cards);
+                    removeCards("comp", cards);
+                    updateCurrentColor(c[0]);
+                    return true;
+                }else{
+                    changeCardsBoard(cards);
+                    changeStatus("Awesome Cards!");
+                    userNowTurn(true);   
+                    removeCards("comp", cards);
+                    updateCurrentColor(c[0]);
+                    return true;
+                }            
+            }else{
+                return false;
+            }
+
+
+        }
+
+        function compAutoCheckNumber(cardID){
+
+            c = cardID.split("_");
+            current = CurrentCards.split("_");
+
+            if(c[1] == current[1]){ // check nombor sama dan belakangnya! 0-9 , four, chooser, draw, skip, reverse
+                if(c[1] == "draw"){
+                    changeStatus("Draw Cards!");
+                    changeCardsBoard(cardID);
+                    updateCurrentColor(c[0]);
+                    for(i=0;i<2;i++) userCards.push(drawOneCards());
+                    removeCards("comp", cardID);
+                    displayUserCards();
+                    return true;
+                }else if(c[1] == "reverse"){
+                    changeStatus("Reverse Cards!");
+                    changeCardsBoard(cardID);
+                    updateCurrentColor(c[0]);
+                    removeCards("comp", cardID);
+                    return true;
+                }else if(c[1] == "skip"){
+                    changeStatus("Skip Cards!");
+                    changeCardsBoard(cardID);
+                    updateCurrentColor(c[0]);
+                    removeCards("comp", cardID);
+                    return true;
+                }else if(c[1] == "four"){ // Kalau sekrang tengah drawfour, bot nak letak drawfour 
+                    displayUserCards();
+                    removeCards("comp", cardID);
+                    changeStatus("Comp wild plus 4 Cards!");
+                    color = compAutoColor();
+                    updateCurrentColor(color);
+                    changeCardsBoard(cardID);
+                    for(i=0;i<4;i++) userCards.push(drawOneCards());
+                    return true;
+                }else if(c[1] == "chooser"){ // Sekarang tengah colorchooser, bot pun nak letak gak
+                    color = compAutoColor();
+                    changeCardsBoard(cardID);
+                    removeCards("comp", cardID);
+                    updateCurrentColor(color);
+                    userNowTurn(true);
+                    return true;
+                }else{ // Nombor sama
+                    changeCardsBoard(cardID);
+                    changeStatus("Nice Cards, Comp!");
+                    userNowTurn(true);
+                    updateCurrentColor(c[0]);
+                    removeCards("comp", cardID);
+                    return true;
+                }
+            }else{
+                return false;
+            }
+
+        }
+        function startGame(){
+            
+            $('#StartGameLink').text('Loading...');
+            setTimeout(function(){
+                $('#StartGameLink').text('Giving cards...');
+            }, 2000);
+            setTimeout(function(){
+                $('#StartGameLink').text('Done!');
+            }, 4000);
+            setTimeout(function(){
+                $("#StartGameLink").css("display", "none");
+                $("#logo").css("display", "none");
+                $("#detailCards").css("display", "block");
+                // Agih 7 cards
+                for(i=0; i<7; i++){
+                    userCards.push(drawOneCards());
+                    compCards.push(drawOneCards());
+                }
+
+                changeCardsBoard();
+                displayUserCards();
+                userNowTurn(true);
+
+                displayDetailCards();
+            }, 5000);
+        }
+
+        function changeStatus(text){
+            $("#statusMessage").text(text);
+        }
+
+        function hideStatus(){
+            displayDetailCards();
+            if(userTurn) changeStatus("Your Turn!");
+            else changeStatus("Comp Turn!");
+        }
+
+        $(document).ready(function(){
+            $("#StartGameLink").on("click", function(e){
+                e.preventDefault();
+                startGame();
+            });
+            $("#userCardBoard").on("click", "img", function(e) {
+                e.preventDefault();
+                $('html, body').animate({
+                    scrollTop: $('body').offset().top
+                }, 400);
+                if(userTurn){
+                    $("#drawUserLink").hide();
+                    $("#passUserLink").show();
+                    cardID = $(this).attr("id");
+                    checkAvailability(cardID);
+                }else{
+                    changeStatus("Not your turn!");
+                }
+            });
+            $("#userCardBoard").on("click", "div", function(e) {
+                e.preventDefault();
+                if(userTurn){
+                    colorID = $(this).attr("id");
+                    chooseColor(colorID);
+                    userNowTurn(false);
+                    
+                    $('html, body').animate({
+                        scrollTop: $('body').offset().top
+                    }, 400);
+                    
+                }  
+            });
+            $("#userCardBoard").on("click", "a#drawUserLink", function(e){
+                e.preventDefault();
+
+                if(userTurn){
+                    draw();
+                    $("#drawUserLink").hide();
+                    $("#passUserLink").show();
+                    displayDetailCards();
+                }else{
+                    changeStatus("Not your turn!");
+                }
+
+            });
+            $("#userCardBoard").on("click", "a#passUserLink", function(e){
+                e.preventDefault();
+                $('html, body').animate({
+                    scrollTop: $('body').offset().top
+                }, 400);
+
+                if(userTurn){
+                    pass();
+                    $("#drawUserLink").hide();
+                    $("#passUserLink").hide();
+                    displayDetailCards();
+                }
+            });
+
+        });
+    </script>
+    
+</body>
+</html>
